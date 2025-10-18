@@ -8,6 +8,7 @@
 
 ```bash
 docker-compose up -d
+docker-compose down
 ```
 
 * Database: `studentsDB`
