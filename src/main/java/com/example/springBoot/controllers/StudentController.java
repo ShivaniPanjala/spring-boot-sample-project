@@ -5,8 +5,11 @@ import com.example.springBoot.entity.Student;
 import com.example.springBoot.repository.StudentRepository;
 import com.example.springBoot.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,9 +42,16 @@ public class StudentController {
 
     private final StudentService studentService;
     @GetMapping("/students")
-    public List<StudentDto> getStudents() {
-        return studentService.getAllStudents();
-    }
+//    public List<StudentDto> getStudents() {
+//        return studentService.getAllStudents();
+//    }
+    public ResponseEntity<List<StudentDto>> getStudents() {
+//        return ResponseEntity.status(HttpStatus.OK).body(studentService.getAllStudents());
+
+        return ResponseEntity.ok(studentService.getAllStudents());
+
+        }
+
 
     @GetMapping("/students/{id}")
     public StudentDto getStudentsById(@PathVariable Long id){
