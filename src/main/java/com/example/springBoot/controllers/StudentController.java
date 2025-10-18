@@ -6,6 +6,7 @@ import com.example.springBoot.repository.StudentRepository;
 import com.example.springBoot.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class StudentController {
         return new StudentDto(456L, "Shivani", "fgh@gmail.com" );
     }
 
-    @GetMapping("/student/{Id}")
+    @GetMapping("/student/{id}")
     public StudentDto getStudentById(){
         return new StudentDto(456L, "Shivani", "fgh@gmail.com" );
     }
@@ -40,6 +41,11 @@ public class StudentController {
     @GetMapping("/students")
     public List<StudentDto> getStudents() {
         return studentService.getAllStudents();
+    }
+
+    @GetMapping("/students/{id}")
+    public StudentDto getStudentsById(@PathVariable Long id){
+        return studentService.getStudentsById(id);
     }
 
 }

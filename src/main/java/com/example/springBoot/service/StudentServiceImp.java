@@ -4,6 +4,7 @@ import com.example.springBoot.dto.StudentDto;
 import com.example.springBoot.entity.Student;
 import com.example.springBoot.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentServiceImp implements StudentService{
     private final StudentRepository studentRepository;
-
+    private final ModelMapper modelMapper;
 //    public StudentServiceImp(StudentRepository studentRepository) {
 //        this.studentRepository = studentRepository;
 //    }
@@ -25,5 +26,11 @@ public class StudentServiceImp implements StudentService{
                 stream().
                 map(Student -> new StudentDto(Student.getId(), Student.getName(), Student.getEmail()) ).
                 toList();
+    }
+
+    @Override
+    public StudentDto getStudentsById(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("student not found with Id: "+ id));
+        return modelMapper.map(student, StudentDto.class);
     }
 }
