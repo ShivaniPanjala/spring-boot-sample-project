@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,39 @@ public class StudentServiceImp implements StudentService{
             throw new IllegalArgumentException("student doesn't exist by id: "+id);
         }
         studentRepository.deleteById(id);
+    }
+
+    @Override
+    public StudentDto updateStudentById(Long id, StudentRequestDto studentRequestDto) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("student not found with Id: "+ id));
+        modelMapper.map(studentRequestDto, student);
+
+        student = studentRepository.save(student);
+        return modelMapper.map(student, StudentDto.class);
+    }
+
+    @Override
+    public StudentDto updatePartialStudentById(Long id, Map<String, Object> updates) {
+        Student existingStudent = studentRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("student not found with Id: "+ id));
+
+        updates.forEach((String field, Object value) -> {
+                    switch (field) {
+                        case "name":
+                            existingStudent.setName((String) value);
+                            break;
+                        case "email":
+                            existingStudent.setEmail((String) value);
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Field is not supported");
+
+                    }
+        });
+
+        Student saveExistingStudent = studentRepository.save(existingStudent);
+        return modelMapper.map(saveExistingStudent, StudentDto.class);
+
     }
 
 
